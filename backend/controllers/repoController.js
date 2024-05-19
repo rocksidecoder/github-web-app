@@ -3,7 +3,7 @@ import handleFetchRequest from "../utils/helper.js"
 // List respositories by username    =>  /api/v1/repo
 export const allUserRepos = async (req, res, next) => {
     try {
-        const { username } = req.query
+        const { username } = req.params
 
         if (!username) return res.json({ status: 422, message: "Please provide username" })
 
@@ -12,12 +12,21 @@ export const allUserRepos = async (req, res, next) => {
         let results = await handleFetchRequest("get", url);
         results = await results.json();
 
+        if(!results.length){
+            return res.json({
+                status: 200,
+                message: "User Repositories list",
+                data: []
+            })
+        }
+
         // sort the result by watchers_count 
         results.sort((a, b) => b.watchers_count - a.watchers_count)
 
         // response body
         const response = {
             username,
+            profile: results[0].owner.html_url,
             avatar: results[0].owner.avatar_url,
             repos: results.map(ele => ({
                 name: ele.name,
@@ -30,7 +39,7 @@ export const allUserRepos = async (req, res, next) => {
         return res.json({
             status: 200,
             message: "User Repositories list",
-            data: response
+            data: [response]
         })
 
     } catch (error) {
@@ -41,7 +50,7 @@ export const allUserRepos = async (req, res, next) => {
 // List starred respositories of login user    =>  /api/v1/repo/starred
 export const userStarredRepos = async(req, res,next)=>{
     try {
-        const url = "https://api.github.com/user/starred"
+        const url = `https://api.github.com/user/starred`
 
         let results = await handleFetchRequest("get", url);
         results = await results.json();
