@@ -1,4 +1,6 @@
 import express from "express";
+import cors from "cors";
+
 const app = express();
 
 import dotenv from "dotenv";
@@ -9,6 +11,9 @@ dotenv.config({ path: "./config/config.env" })
 
 // setup body parser
 app.use(express.json())
+
+// cors
+app.use(cors());
 
 // Importing all routes
 app.use('/api/v1', router)
