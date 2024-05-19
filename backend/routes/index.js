@@ -11,8 +11,8 @@ router.post('/register', registerUser)
 router.post('/login', loginUser)
 
 // Github routes
-router.get('/repo', isAuth, allUserRepos)
 router.get('/repo/starred', isAuth, userStarredRepos)
+router.get('/repo/:username', isAuth, allUserRepos)
 router.put('/repo/star', isAuth, starRepo)
 router.delete('/repo/unstar', isAuth, unstarRepo)
 

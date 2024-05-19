@@ -12,7 +12,7 @@ export const registerUser = async (req, res, next) => {
         const { body } = req;
 
         // validate body
-        if(!body?.username || !body?.password){
+        if (!body?.username || !body?.password) {
             return res.json({
                 status: 422,
                 message: "Please provide username and password"
@@ -39,11 +39,21 @@ export const loginUser = async (req, res, next) => {
 
         // check users exxists or not 
         const user = await Users.findOne({ where: { username } });
-        if (!user) throw new Error("Invalid Username!")
+        if (!user) {
+            return res.json({
+                status: 422,
+                message: "Invalid Username",
+            })
+        }
 
         // validate user password
-        const validatePassword = await bcrypt.compare(password,user.password);
-        if (!validatePassword) throw new Error("Invalid Password!")
+        const validatePassword = await bcrypt.compare(password, user.password);
+        if (!validatePassword) {
+            return res.json({
+                status: 422,
+                message: "Invalid Password",
+            })
+        }
 
         // generate jwt token
         const payload = { id: user.id, username: user.usernamme }
@@ -52,7 +62,7 @@ export const loginUser = async (req, res, next) => {
         return res.json({
             status: 200,
             message: "Login successfully",
-            data: user.token
+            data: { token: user.token }
         })
     } catch (error) {
         next(error)
