@@ -78,6 +78,7 @@ const Dashboard = () => {
       const results = response.data;
       if (results.status === 200) {
         setIsStar(!isStar)
+        setUserData([])
         setStarredRepo(results.data)
       } else {
         setError(results.message);
@@ -88,9 +89,11 @@ const Dashboard = () => {
   };
 
   // handle close starred repo
-  const handleCloseStarredRepo = ()=>{
+  const handleCloseStarredRepo = () => {
     setIsStar(!isStar)
+    setSearchTerm('')
     setStarredRepo([]);
+    fetchUserRepo("octocat")
   }
 
   return (
@@ -116,6 +119,9 @@ const Dashboard = () => {
           <input type="text" className="form-control" placeholder="Enter username" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           <button className="btn btn-primary" type="button" onClick={handleSearch}>Search</button>
         </div>
+        <button type="button" className={!isStar ? "btn btn-primary btn-md float-end" : "btn btn-danger btn-md float-end"} onClick={!isStar ? handleStarredRepo : handleCloseStarredRepo}>
+          {!isStar ? "List starred repo" : "close starred repo"}
+        </button>
 
         {userData.length ? (
           <>
@@ -127,14 +133,9 @@ const Dashboard = () => {
                 <span className="mb-0">{userData[0]?.username}</span>
                 <a href={userData[0].profile} className="ms-3">profile</a>
               </div>
-              <div className="col-md-4 d-flex align-items-center">
-                <button type="button" className={!isStar ? "btn btn-primary btn-md" : "btn btn-danger btn-md"} onClick={!isStar ? handleStarredRepo : handleCloseStarredRepo }>
-                  {!isStar ? "List starred repo" : "close starred repo" }
-                </button>
-              </div>
             </div>
             <div className="row">
-              {!starredRepo.length ? userData[0].repos.map(repo => (
+              {userData[0].repos.map(repo => (
                 <div className="col-md-6" key={repo.name}>
                   <div className="card mb-3">
                     <div className="card-body">
@@ -152,30 +153,35 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
-              )) : (
-                starredRepo.map(repo => (
-                  <div className="col-md-6" key={repo.repo_name}>
-                    <div className="card mb-3">
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-6">
-                            <p className="card-text">Total watchers: {repo.repo_name}</p>
-                            <p className="card-text">Repo type: {repo.stargazers_count}</p>
-                            <p className="card-text">Description: {repo.description || "No description"}</p>
-                          </div>
+              ))}
+            </div >
+          </>
+        ) : !isStar ? 'No Repositories Available': ''}
+
+        {starredRepo.length ? (
+          <>
+            <div className="row">
+              {starredRepo.map(repo => (
+                <div className="col-md-6" key={repo.repo_name}>
+                  <div className="card mb-3">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-6">
+                          <p className="card-text">Repo: {repo.repo_name}</p>
+                          <p className="card-text">Repo type: {repo.stargazers_count}</p>
+                          <p className="card-text">Description: {repo.description || "No description"}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                </div>
+              ))}
+            </div >
           </>
-        ) : (
-          <h3>No data available</h3>
-        )}
-      </div>
-    </div>
+        ) : isStar ? 'No Starred Repositories' : ''}
+
+      </div >
+    </div >
   );
 };
 
