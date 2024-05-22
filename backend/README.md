@@ -1,5 +1,3 @@
-# github-web-app
-Develop a web app using a third party api which is github.
 # Backend Setup Instructions
 
 Follow these steps to set up and start the backend server:
