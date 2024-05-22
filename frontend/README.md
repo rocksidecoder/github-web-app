@@ -1,8 +1,25 @@
-# React + Vite
+# Front Setup Instructions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Follow these steps to set up and start the backend server:
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Create an environment file inside the `src` folder and configure it according to your needs. You can copy the provided `env.example` file as a template.
+
+    ```env
+    BACKEND_URL=your_database_url
+    ```
+## Install Dependencies
+
+1. Make sure you have [Yarn](https://classic.yarnpkg.com/en/docs/install) installed.
+
+2. Install project dependencies:
+    ```sh
+    yarn install
+    ```
+## Start Server
+
+1. Start the development server:
+    ```sh
+    yarn dev
+    ```
