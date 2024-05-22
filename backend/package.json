@@ -9,7 +9,9 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate:up": "yarn sequelize-cli db:migrate",
+    "migrate:down": "yarn sequelize-cli db:migrate:undo:all"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
